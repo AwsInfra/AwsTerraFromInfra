@@ -10,19 +10,19 @@ provider "aws" {
      cidr_block = "${var.vpc_cidr}"
      enable_dns_hostnames= true
 
-     tags{
-         Name = "DevopsOne-VPC"
-     }
-}
+     #tags{
+      #   Name = "DevopsOne-VPC"
+     #}
+ }
 
 # Setup the public subnet - on US-East-1A AZ
 resource "aws_subnet" "public-subnet" {
     vpc_id ="${aws_vpc.Devops.id}"
     cidr_block ="${var.public_subnet_cidr}"
     availability_zone ="us-east-1a"
-  tags{
-      Name = "Public Subnet"
-  }
+  #tags{
+   #   Name = "Public Subnet"
+  #}
 }
 
 # Setup private subnet - on US-East-1B AZ
@@ -31,19 +31,19 @@ resource "aws_subnet" "private-subnet" {
     cidr_block="${var.private_subnet_cidr}"
     availability_zone= "us-east-1b"
 
-    tags{
-        Name = "Private Subnet"
-    }
+   # tags{
+    #    Name = "Private Subnet"
+    #}
   
 }
 
  # Setup internet gateway
 resource "aws_internet_gateway" "gw"{
-    vpc_id = "${aws_vpc.Devops}"
+    vpc_id = "${aws_vpc.Devops.id}"
 
-    tags{
-        Name = "DevopsOne-Internet GateWay"
-    }
+    #tags{
+     #   Name = "DevopsOne-Internet GateWay"
+    #}
 }
 
 # Setup Route Table
@@ -56,9 +56,9 @@ resource "aws_route_table" "web-public-rt" {
         gateway_id ="${aws_internet_gateway.gw.id}"
     }
 
-    tags{
-        Name = "Public Subnet Route Table"
-    }
+    #tags{
+     #   Name = "Public Subnet Route Table"
+    #}
   
 }
 
@@ -76,7 +76,7 @@ resource "aws_security_group" "sg-public" {
          from_port = 8080
          to_port = 8080
          protocol = "tcp"
-         cidr_blocks = "[0.0.0.0/0]"
+         cidr_blocks = ["0.0.0.0/0"]
      }
      ingress {
     from_port = 443
@@ -110,9 +110,9 @@ ingress {
     }
     vpc_id = "${aws_vpc.Devops.id}"
 
-    tags{
-        Name ="Public-sg"
-    }
+    #tags{
+     #   Name ="Public-sg"
+    #}
   
 }
 
@@ -162,9 +162,9 @@ egress {
 
   vpc_id ="${aws_vpc.Devops.id}"
 
-  tags {
-    Name = "Private-SG"
-  }
+  #tags {
+   # Name = "Private-SG"
+  #}
 
 
   
